@@ -38,7 +38,7 @@ function createArr(){
     }).then(jsonValue => {
         var MinePos = jsonValue.board.minePositions
         for (i = 0; i < MinePos.length; i++){
-            mainArr[MinePos[i][0]].splice(MinePos[i][1], 1, "X");
+            mainArr[MinePos[i][0]].splice(MinePos[i][1], 1, src="prj02_suppl/bomb.png");
         };
         mainArr = detectMines(mainArr)
         return mainArr;
@@ -51,7 +51,11 @@ function makeTableHTML(myArray) {
     for(var i=0; i<myArray.length; i++) {
         result += "<tr>";
         for(var j=0; j<myArray[i].length; j++){
-            result += "<td>"+myArray[i][j]+"</td>";
+            if (myArray[i][j] == "prj02_suppl/bomb.png"){
+                result += "<td><img src='" + myArray[i][j] + "'></img></td>"
+            }else{
+                result += "<td>"+myArray[i][j]+"</td>";
+            }
         }
         result += "</tr>";
     }
@@ -65,23 +69,23 @@ function detectMines(myArray){
         for (var j = 0; j < myArray[i].length; j++){
             mineCount = 0
             if (myArray[i][j+1] || myArray[i][j-1] != null){
-                if (myArray[i][j] != 'X'){
-                    if (myArray[i][j+1] == "X"){
+                if (myArray[i][j] != 'prj02_suppl/bomb.png'){
+                    if (myArray[i][j+1] == "prj02_suppl/bomb.png"){
                         mineCount++;
                     }
-                    if (myArray[i][j-1] == "X"){
+                    if (myArray[i][j-1] == "prj02_suppl/bomb.png"){
                         mineCount++;
                     }
                     if (myArray[i+1] != null){
                         for (var x = j-1; x <= j+1; x++){
-                            if (myArray[i+1][x] == 'X'){
+                            if (myArray[i+1][x] == 'prj02_suppl/bomb.png'){
                                 mineCount++;
                             }
                         }
                     }
                     if (myArray[i-1] != null){
                         for (var x = j-1; x <= j+1; x++){
-                            if (myArray[i-1][x] == 'X'){
+                            if (myArray[i-1][x] == 'prj02_suppl/bomb.png'){
                                 mineCount++;
                             }
                         }
