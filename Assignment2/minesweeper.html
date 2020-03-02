@@ -13,9 +13,9 @@
             <div class="gameMenu">
                 <div id="menuItems">
                 <!-- <form action="https://veff213-minesweeper.herokuapp.com/api/v1/minesweeper" method="post"> -->
-                    Rows:<input id="rows" type="number" name="Rows">
-                    Columns:<input id="columns" type="number" name="Columns">
-                    Mines:<input id="mines" type="number" name="Mines">
+                    Rows:<input id="rows" type="number" name="Rows" min="1" max="40">
+                    Columns:<input id="columns" type="number" name="Columns" min="1" max="40">
+                    Mines:<input id="mines" type="number" name="Mines" min="1" max="1600">
                     Submit:<input id="submit" type="submit" onclick="main()" value="Submit">
                 <!-- </form> -->
                 </div>

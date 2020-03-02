@@ -9,6 +9,19 @@ async function main() {
     document.getElementById("gameBoard").innerHTML = makeTableHTML(mainArr);
 };
 
+function RevealArray(myArray){
+    var x=false;
+    var reveal=[];
+    for(var i=0; i<myArray.rowLength; i++){
+        reveal.push(Array(myArray.colLength).fill(x))
+    }
+};
+
+function buttonpress(){
+    // Breyta xxx fylkinu þannig að stak i,j er orðið true
+    
+};
+
 function createArr(){
     const url = 'https://veff213-minesweeper.herokuapp.com/api/v1/minesweeper';
     var rowLength = parseInt(document.getElementById('rows').value);
@@ -56,6 +69,7 @@ function makeTableHTML(myArray) {
     for(var i=0; i<myArray.length; i++) {
         result += "<tr>";
         for(var j=0; j<myArray[i].length; j++){
+            // if xxx[i][j]==true
             if (myArray[i][j] == "prj02_suppl/bomb.png"){
                 result += "<td style='background-color:red;'><img src='" + myArray[i][j] + "'></img></td>"
             }else{
