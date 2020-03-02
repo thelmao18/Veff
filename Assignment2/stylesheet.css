@@ -18,7 +18,27 @@
     width: 60%;
 }
 
+#flex-container {
+    display: flex;
+    justify-content: center;
+    margin: 80px 10px;
+}
+
 #gameBoard{
     margin-left: auto;
     margin-right: auto;
+    background-color: lightgray;
+}
+
+td {
+    height: 20px;
+    width: 20px;
+    background-color: #D3D3D3;
+    border: 1.5px solid;
+    border-top-color: #ffffff;
+    border-right-color: #7B7B7B;
+    border-bottom-color: #7B7B7B;
+    border-left-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
 }
