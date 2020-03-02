@@ -1,4 +1,4 @@
-#gameMenu{
+.gameMenu{
     margin-left: auto;
     margin-right: auto;
     width: 50%;
@@ -18,15 +18,13 @@
     width: 60%;
 }
 
-#flex-container {
+.flex-container {
     display: flex;
     justify-content: center;
     margin: 80px 10px;
 }
 
 #gameBoard{
-    margin-left: auto;
-    margin-right: auto;
     background-color: lightgray;
 }
 
