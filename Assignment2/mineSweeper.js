@@ -55,10 +55,10 @@ function makeTableHTML(myArray) {
     result += "</table>";
 
     return result;
-    for (var i = 0; i < numOfArr;) {
-        console.log("Array nr" + i + ": " + myArray[i])
-    }
-    console.log(myArray)
+    // for (var i = 0; i < numOfArr;) {
+    //     console.log("Array nr" + i + ": " + myArray[i])
+    // }
+    // console.log(myArray)
     // for (var i = 0; i < numOfArr; i++){
     //     console.log("Nr " + i + ": " + myArray[i])
     // }
