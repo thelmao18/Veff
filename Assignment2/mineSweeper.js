@@ -1,3 +1,8 @@
+var mineImage = '<img src="prj02_suppl/bomb.png">';
+var flagImage = '<img src="prj02_suppl/flag.png">';
+var mine_hit;
+var winner;
+
 async function main() {
     const mainArr = await createArr();
     console.log(mainArr);
