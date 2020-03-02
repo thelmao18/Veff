@@ -1,65 +1,51 @@
-function main(){
-    mainArr = []
-    mainArr = createArr();
-    // console.log(mainArr);
-    document.getElementById("gameBoard").innerHTML = makeTableHTML(mainArr);;
+async function main() {
+    const mainArr = await createArr();
+    console.log(mainArr);
+    document.getElementById("gameBoard").innerHTML = makeTableHTML(mainArr);
 };
 
 function createArr(){
-    const Http = new XMLHttpRequest();
     const url = 'https://veff213-minesweeper.herokuapp.com/api/v1/minesweeper';
-    Http.open('POST', url)
-    Http.send();
-    numOfArr = document.getElementById('rows').value;
-    lenOfArr = document.getElementById('columns').value;
-    if (numOfArr < 10 || lenOfArr < 10){
-        numOfArr = 10;
-        lenOfArr = 10;
+    var rowLength = parseInt(document.getElementById('rows').value);
+    var colLength = parseInt(document.getElementById('columns').value);
+    if (rowLength < 10 || colLength < 10){
+        rowLength = 10;
+        colLength = 10;
     }
     mainArr = [];
-    
-    for (var i = 0; i < numOfArr;){
-        smallArr = []
-        for (var j = 0; j < lenOfArr;){
-            smallArr.push('O')
-            j++;
-        }
-        mainArr.push(smallArr);
-        i++;
+    for (var i = 0; i < rowLength; i++){
+        mainArr.push(Array(colLength).fill('O'));
     }
-    Http.onreadystatechange = (e) => {
-        value = Http.responseText;
-        Obj = JSON.parse(value);
-        var MinePos = Obj.board.minePositions
-        for (i = 0; i < numOfArr;){
+    return fetch(url, {method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+      },})
+    .then((response) => {
+        if(response.status >=200 && response.status < 300) {
+            return response.json();
+        } else {
+            console.warn('Error in post request');
+        }
+
+    }).then(jsonValue => {
+        var MinePos = jsonValue.board.minePositions
+        for (i = 0; i < MinePos.length; i++){
             mainArr[MinePos[i][0]].splice(MinePos[i][1], 1, "X");
-            i++;
         };
-    };
-    return mainArr
+        return mainArr;
+    });
 }
 
 function makeTableHTML(myArray) {
     var result = "<table border=1>";
-    console.log(myArray)
-    for(var i=0; i<numOfArr;) {
+    for(var i=0; i<myArray.length; i++) {
         result += "<tr>";
-        console.log(myArray[i])
-        for(var j=0; j<lenOfArr;){
+        for(var j=0; j<myArray[i].length; j++){
             result += "<td>"+myArray[i][j]+"</td>";
-            j++;
         }
         result += "</tr>";
-        i++
     }
     result += "</table>";
 
     return result;
-    // for (var i = 0; i < numOfArr;) {
-    //     console.log("Array nr" + i + ": " + myArray[i])
-    // }
-    // console.log(myArray)
-    // for (var i = 0; i < numOfArr; i++){
-    //     console.log("Nr " + i + ": " + myArray[i])
-    // }
 }
