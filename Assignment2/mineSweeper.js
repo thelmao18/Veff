@@ -57,7 +57,7 @@ function makeTableHTML(myArray) {
         result += "<tr>";
         for(var j=0; j<myArray[i].length; j++){
             if (myArray[i][j] == "prj02_suppl/bomb.png"){
-                result += "<td><img src='" + myArray[i][j] + "'></img></td>"
+                result += "<td style='background-color:red;'><img src='" + myArray[i][j] + "'></img></td>"
             }else{
                 result += "<td>"+myArray[i][j]+"</td>";
             }
