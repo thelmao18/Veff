@@ -8,15 +8,23 @@ function createArr(){
     const url = 'https://veff213-minesweeper.herokuapp.com/api/v1/minesweeper';
     var rowLength = parseInt(document.getElementById('rows').value);
     var colLength = parseInt(document.getElementById('columns').value);
-    if (rowLength < 10 || colLength < 10){
+    var mines = parseInt(document.getElementById('mines').value);
+    if (rowLength < 10 || colLength < 10 || mines < 10){
         rowLength = 10;
         colLength = 10;
-    }
+        mines = 10;
+    } 
+    const body = {
+        rows: (rowLength > 10 ? rowLength : 10), 
+        cols:(colLength> 10 ? colLength : 10), 
+        mines: (mines > 10 ? mines : 10)
+    };
     mainArr = [];
     for (var i = 0; i < rowLength; i++){
         mainArr.push(Array(colLength).fill(' '));
     }
-    return fetch(url, {method: 'POST',
+    return fetch(url, {method: 'POST', 
+    body: JSON.stringify(body),
     headers: {
         'Content-Type': 'application/json',
       },})
@@ -83,7 +91,6 @@ function detectMines(myArray){
                     }
             }
             }
-            console.log("myArray[" + i + "][" + j + "]: " + mineCount);
         }
     }
     return myArray;
