@@ -14,7 +14,7 @@ function createArr(){
     }
     mainArr = [];
     for (var i = 0; i < rowLength; i++){
-        mainArr.push(Array(colLength).fill('O'));
+        mainArr.push(Array(colLength).fill(' '));
     }
     return fetch(url, {method: 'POST',
     headers: {
@@ -32,8 +32,10 @@ function createArr(){
         for (i = 0; i < MinePos.length; i++){
             mainArr[MinePos[i][0]].splice(MinePos[i][1], 1, "X");
         };
+        mainArr = detectMines(mainArr)
         return mainArr;
     });
+    
 }
 
 function makeTableHTML(myArray) {
@@ -48,4 +50,41 @@ function makeTableHTML(myArray) {
     result += "</table>";
 
     return result;
+}
+
+function detectMines(myArray){
+    for (let i = 0; i < myArray.length; i++){
+        for (var j = 0; j < myArray[i].length; j++){
+            mineCount = 0
+            if (myArray[i][j+1] || myArray[i][j-1] != null){
+                if (myArray[i][j] != 'X'){
+                    if (myArray[i][j+1] == "X"){
+                        mineCount++;
+                    }
+                    if (myArray[i][j-1] == "X"){
+                        mineCount++;
+                    }
+                    if (myArray[i+1] != null){
+                        for (var x = j-1; x <= j+1; x++){
+                            if (myArray[i+1][x] == 'X'){
+                                mineCount++;
+                            }
+                        }
+                    }
+                    if (myArray[i-1] != null){
+                        for (var x = j-1; x <= j+1; x++){
+                            if (myArray[i-1][x] == 'X'){
+                                mineCount++;
+                            }
+                        }
+                    }
+                    if (mineCount != 0){
+                        myArray[i].splice(j, 1 , mineCount)
+                    }
+            }
+            }
+            console.log("myArray[" + i + "][" + j + "]: " + mineCount);
+        }
+    }
+    return myArray;
 }
