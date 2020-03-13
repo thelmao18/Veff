@@ -1,7 +1,10 @@
 var mineImage = '<img src="prj02_suppl/bomb.png">';
 var flagImage = '<img src="prj02_suppl/flag.png">';
 var mine_hit;
-var winner;
+var won = false;
+var lost = false;
+var revealed = 0;
+var remaining = mines;
 
 async function main() {
     const mainArr = await createArr();
@@ -17,9 +20,16 @@ function RevealArray(myArray){
     }
 };
 
-function buttonpress(){
+function click(event){
     // Breyta xxx fylkinu þannig að stak i,j er orðið true
-    
+    var source = event.target;
+    id = source.id;
+
+    if (event.)
+    window.addEventListener('click', function (e) {
+        myGameArea.x = e.pageX;
+        myGameArea.y = e.pageY;
+    })
 };
 
 function createArr(){
@@ -117,4 +127,15 @@ function detectMines(myArray){
         }
     }
     return myArray;
+}
+
+function displayWin() {
+    won = true;
+
+}
+
+function displayLoss() {
+    if (lost) return;
+    lost = true;
+
 }
