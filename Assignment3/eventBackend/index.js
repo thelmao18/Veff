@@ -26,6 +26,13 @@ var bookings = [
 //The endpoints for events
 
 //Read all events
+app.get(apiPath + version + '/events', (req, res) => {
+    let ret_arr = [];
+    for (let i=0;i<events.length;i++) {
+        ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: events[i].startDate, endDate: events[i].endDate});
+    }
+    res.status(200).json(ret_arr);
+})
 
 //Read an individual event
 
