@@ -1,3 +1,13 @@
+const express = require('express');
+
+const app = express();
+const apiPath = '/api/';
+const version = 'v1';
+const port = 3000;
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 //Sample data for Assignment 3
 
 //The following is an example of an array of two events. 
@@ -12,3 +22,30 @@ var bookings = [
     { id: 1, firstName: "Jane", lastName: "Doe", tel: "", email: "jane@doe.doe", spots: 1},
     { id: 2, firstName: "Meðaljón", lastName: "Jónsson", tel: "+3541111111", email: "mj@test.is", spots: 5}
 ];
+
+//The endpoints for events
+
+//Read all events
+
+//Read an individual event
+
+//Create a new event
+
+//Update an event
+
+//Delete an event
+
+//Delete all events
+
+
+//The endpoints for bookings
+
+//Read all bookings for an event
+
+//Read an individual booking
+
+//Create a new booking
+
+//Delete a booking
+
+//Delete all bookings for an event
