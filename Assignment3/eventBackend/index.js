@@ -1,11 +1,17 @@
+//Import express
 const express = require('express');
 
+//Initialize express
 const app = express();
+
+//URL
 const apiPath = '/api/';
 const version = 'v1';
 const port = 3000;
 
+//Import a body parser to access the requests as json
 const bodyParser = require('body-parser');
+//Make express use the body parser
 app.use(bodyParser.json());
 
 //Sample data for Assignment 3
@@ -32,7 +38,7 @@ app.get(apiPath + version + '/events', (req, res) => {
         ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: events[i].startDate, endDate: events[i].endDate});
     }
     res.status(200).json(ret_arr);
-})
+});
 
 //Read an individual event
 app.get(apiPath + version + '/events/:eventId', (req, res) => {
@@ -41,7 +47,7 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
             return res.status(200).json(events[i]);
         }
     }
-})
+});
 
 //Create a new event
 
@@ -76,3 +82,13 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
 //Delete a booking
 
 //Delete all bookings for an event
+
+//If not right URL given, then send error message.
+app.use('*', (req, res) => {
+    res.status(405).send('Operation not supported!');
+});
+
+//Start the application.
+app.listen(port, () => {
+    console.log('Express app listening on port ' + port);
+});
