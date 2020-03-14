@@ -93,8 +93,8 @@ app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) =
     for (let i=0;i<events.length;i++) {
         if (events[i].id == req.params.eventId) {
             for (let x=0;x<bookings.length;x++) {
-                if (events[i].bookings[x].id == req.params.bookingId) {
-                    return res.status(200).json(events[i].bookings[x]);
+                if (bookings[x].id == req.params.bookingId) {
+                    return res.status(200).json(bookings[x]);
                 }
             }
             res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist."});
