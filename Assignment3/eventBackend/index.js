@@ -41,29 +41,41 @@ app.get(apiPath + version + '/events', (req, res) => {
 });
 
 //Read an individual event
-app.get(apiPath + version + '/events/:eventId', (req, res) => {
+app.get(apiPath + version + '/events/:id', (req, res) => {
     for (let i=0;i<events.length;i++) {
-        if (events[i].id == req.params.eventId) {
+        if (events[i].id == req.params.id) {
             return res.status(200).json(events[i]);
         }
     }
+    res.status(404).json({'message': "Event with id " + req.params.id + " does not exist."});
 });
 
 //Create a new event
+app.post(apiPath + version + '/events', (req, res) => {
+    res.status(201).send('Hello World');
+});
 
 //Update an event
+app.put(apiPath + version + '/events/:id', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //Delete an event
+app.delete(apiPath + version + '/events/:id', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //Delete all events
-
+app.delete(apiPath + version + '/events', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //The endpoints for bookings
 
 //Read all bookings for an event
-app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
+app.get(apiPath + version + '/events/:id/bookings', (req, res) => {
     for (let i=0;i<events.length;i++) {
-        if (events[i].id == req.params.eventId) {
+        if (events[i].id == req.params.id) {
             let ret_arr = [];
             for (let x=0;x<bookings.length;x++) {
                 if (events[i].bookings.includes(bookings[x].id)) {
@@ -73,15 +85,27 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
             return res.status(200).json(ret_arr);
         }
     }
-})
+});
 
 //Read an individual booking
+app.get(apiPath + version + '/events/:id/bookings/:id', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //Create a new booking
+app.post(apiPath + version + '/events/:id/bookings', (req, res) => {
+    res.status(201).send('Hello World');
+});
 
 //Delete a booking
+app.delete(apiPath + version + '/events/:id/bookings/:id', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //Delete all bookings for an event
+app.delete(apiPath + version + '/events/:id/bookings', (req, res) => {
+    res.status(200).send('Hello World');
+});
 
 //If not right URL given, then send error message.
 app.use('*', (req, res) => {
