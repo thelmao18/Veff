@@ -34,7 +34,7 @@ var bookings = [
 //Read all events #1
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
-    for (let i=0;i<events.length;i++) {
+    for (let i = 0; i < events.length; i++) {
         ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: events[i].startDate, endDate: events[i].endDate});
     }
     res.status(200).json(ret_arr);
@@ -42,7 +42,7 @@ app.get(apiPath + version + '/events', (req, res) => {
 
 //Read an individual event #2
 app.get(apiPath + version + '/events/:eventId', (req, res) => {
-    for (let i=0;i<events.length;i++) {
+    for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
             return res.status(200).json(events[i]);
         }
@@ -67,17 +67,19 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
 
 //Delete all events #6
 app.delete(apiPath + version + '/events', (req, res) => {
-    res.status(200).send('Hello World');
+    var ret_arr = events.slice();
+    events = [];
+    res.status(200).json(ret_arr);
 });
 
 //The endpoints for bookings
 
 //Read all bookings for an event #7
 app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
-    for (let i=0;i<events.length;i++) {
+    for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
             let ret_arr = [];
-            for (let x=0;x<bookings.length;x++) {
+            for (let x = 0; x < bookings.length; x++) {
                 if (events[i].bookings.includes(bookings[x].id)) {
                     ret_arr.push(bookings[x]);
                 }
@@ -90,9 +92,9 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
 
 //Read an individual booking #8
 app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
-    for (let i=0;i<events.length;i++) {
+    for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
-            for (let x=0;x<bookings.length;x++) {
+            for (let x = 0; x < bookings.length; x++) {
                 if (bookings[x].id == req.params.bookingId) {
                     return res.status(200).json(bookings[x]);
                 }
