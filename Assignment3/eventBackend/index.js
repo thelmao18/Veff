@@ -118,7 +118,7 @@ app.delete(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     res.status(200).send('Hello World');
 });
 
-//If not right URL given, then send error message.
+//If not right URL given or endpoint does not exist, then send error message.
 app.use('*', (req, res) => {
     res.status(405).send('Operation not supported!');
 });
