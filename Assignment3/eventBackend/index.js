@@ -35,6 +35,13 @@ app.get(apiPath + version + '/events', (req, res) => {
 })
 
 //Read an individual event
+app.get(apiPath + version + '/events/:eventId', (req, res) => {
+    for (let i=0;i<events.length;i++) {
+        if (events[i].id == req.params.eventId) {
+            return res.status(200).json(events[i]);
+        }
+    }
+})
 
 //Create a new event
 
@@ -48,6 +55,19 @@ app.get(apiPath + version + '/events', (req, res) => {
 //The endpoints for bookings
 
 //Read all bookings for an event
+app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
+    for (let i=0;i<events.length;i++) {
+        if (events[i].id == req.params.eventId) {
+            let ret_arr = [];
+            for (let x=0;x<bookings.length;x++) {
+                if (events[i].bookings.includes(bookings[x].id)) {
+                    ret_arr.push(bookings[x]);
+                }
+            }
+            return res.status(200).json(ret_arr);
+        }
+    }
+})
 
 //Read an individual booking
 
