@@ -62,7 +62,13 @@ app.put(apiPath + version + '/events/:eventId', (req, res) => {
 
 //Delete an event #5
 app.delete(apiPath + version + '/events/:eventId', (req, res) => {
-    res.status(200).send('Hello World');
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id == req.params.eventId) {
+            var ret_arr = events.slice(i, 1);
+            return res.status(200).json(ret_arr);
+        }
+    }
+    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
 //Delete all events #6
@@ -117,7 +123,14 @@ app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res
 
 //Delete all bookings for an event #11
 app.delete(apiPath + version + '/events/:eventId/bookings', (req, res) => {
-    res.status(200).send('Hello World');
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id == req.params.eventId) {
+            var ret_arr = bookings.slice();
+            events[i].bookings = [];
+            return res.status(200).json(ret_arr);
+        }
+    }
+    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
 //If not right URL given or endpoint does not exist, then send error message.
