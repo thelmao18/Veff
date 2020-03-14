@@ -31,7 +31,7 @@ var bookings = [
 
 //The endpoints for events
 
-//Read all events
+//Read all events #1
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
     for (let i=0;i<events.length;i++) {
@@ -40,7 +40,7 @@ app.get(apiPath + version + '/events', (req, res) => {
     res.status(200).json(ret_arr);
 });
 
-//Read an individual event
+//Read an individual event #2
 app.get(apiPath + version + '/events/:eventId', (req, res) => {
     for (let i=0;i<events.length;i++) {
         if (events[i].id == req.params.eventId) {
@@ -50,29 +50,29 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
     res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
-//Create a new event
+//Create a new event #3
 app.post(apiPath + version + '/events', (req, res) => {
     res.status(201).send('Hello World');
 });
 
-//Update an event
+//Update an event #4
 app.put(apiPath + version + '/events/:eventId', (req, res) => {
     res.status(200).send('Hello World');
 });
 
-//Delete an event
+//Delete an event #5
 app.delete(apiPath + version + '/events/:eventId', (req, res) => {
     res.status(200).send('Hello World');
 });
 
-//Delete all events
+//Delete all events #6
 app.delete(apiPath + version + '/events', (req, res) => {
     res.status(200).send('Hello World');
 });
 
 //The endpoints for bookings
 
-//Read all bookings for an event
+//Read all bookings for an event #7
 app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     for (let i=0;i<events.length;i++) {
         if (events[i].id == req.params.eventId) {
@@ -88,15 +88,13 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
-//Read an individual booking
+//Read an individual booking #8
 app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     for (let i=0;i<events.length;i++) {
         if (events[i].id == req.params.eventId) {
             for (let x=0;x<bookings.length;x++) {
-                if (events[i].bookings.includes(bookings[x].id)) {
-                    if (events[i].bookings[x].id == req.params.bookingId) {
-                        return res.status(200).json(events[i].bookings[x]);
-                    }
+                if (events[i].bookings[x].id == req.params.bookingId) {
+                    return res.status(200).json(events[i].bookings[x]);
                 }
             }
             res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist."});
@@ -105,17 +103,17 @@ app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) =
     res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
-//Create a new booking
+//Create a new booking #9
 app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     res.status(201).send('Hello World');
 });
 
-//Delete a booking
+//Delete a booking #10
 app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     res.status(200).send('Hello World');
 });
 
-//Delete all bookings for an event
+//Delete all bookings for an event #11
 app.delete(apiPath + version + '/events/:eventId/bookings', (req, res) => {
     res.status(200).send('Hello World');
 });
