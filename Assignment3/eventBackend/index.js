@@ -35,7 +35,7 @@ var bookings = [
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
     for (let i = 0; i < events.length; i++) {
-        ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: Date(events[i].startDate), endDate: Date(events[i].endDate)});
+        ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: events[i].startDate, endDate: events[i].endDate});
     }
     res.status(200).json(ret_arr);
 });
@@ -66,23 +66,26 @@ app.post(apiPath + version + '/events', (req, res) => {
         nextEventId = events.length;
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
-        res.status(201).json(newEvent);
+        return res.status(201).json(newEvent);
     }
 });
 
 //Update an event #4
 app.put(apiPath + version + '/events/:eventId', (req, res) => {
-    if (req.body === undefined || req.body.name === undefined || req.body.description === undefined || req.body.location === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
-        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
-    }
-    for(let i = 0; i < events.length; i++){
-        if(events[i].id == req.params.eventId){
-            let newEvent = {id: req.query.id, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
-            events[i] = newEvent
-            res.status(201).json(events[i])
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id == req.params.eventId) {
+            for (let x = 0; x < bookings.length; x++) {
+                if (!events[i].bookings.includes(bookings[x].id)) {
+                    for (let y = 1; y < events.length - 1; y++){
+                        events = events.splice(y, 1, req.body[y])
+                        return res.status(201).status.json(events[i]);
+                    }
+                }
+            }
+            return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be updated."});
         }
-        res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
     }
+    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
 //Delete an event #5
