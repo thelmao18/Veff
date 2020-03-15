@@ -63,7 +63,7 @@ app.post(apiPath + version + '/events', (req, res) => {
             return res.status(400).json({'message': "Invalid date string"})
         }
 
-        nextEventId = events.length;
+        let nextEventId = events.length;
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
         return res.status(201).json(newEvent);
@@ -76,10 +76,9 @@ app.put(apiPath + version + '/events/:eventId', (req, res) => {
         if (events[i].id == req.params.eventId) {
             for (let x = 0; x < bookings.length; x++) {
                 if (!events[i].bookings.includes(bookings[x].id)) {
-                    for (let y = 1; y < events.length - 1; y++){
-                        events = events.splice(y, 1, req.body[y])
-                        return res.status(201).status.json(events[i]);
-                    }
+                    let updatedEvent = {id: events[i].id, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
+                    events[i] = updatedEvent
+                    return res.status(201).json(events[i])
                 }
             }
             return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be updated."});
