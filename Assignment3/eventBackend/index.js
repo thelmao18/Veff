@@ -35,7 +35,7 @@ var bookings = [
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
     for (let i = 0; i < events.length; i++) {
-        ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: events[i].startDate, endDate: events[i].endDate});
+        ret_arr.push({id: events[i].id, name: events[i].name, capacity: events[i].capacity, startDate: Date(events[i].startDate), endDate: Date(events[i].endDate)});
     }
     res.status(200).json(ret_arr);
 });
@@ -59,17 +59,30 @@ app.post(apiPath + version + '/events', (req, res) => {
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
             return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
         }
-        if (isNaN(Number(req.body.startDate)) || Number(req.body.startDate))
-        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: req.body.startDate, endDate: req.body.endDate, bookings: []};
+        if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
+            return res.status(400).json({'message': "Invalid date string"})
+        }
+
+        nextEventId = events.length;
+        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
-        nextEventId++;
         res.status(201).json(newEvent);
     }
 });
 
 //Update an event #4
 app.put(apiPath + version + '/events/:eventId', (req, res) => {
-    res.status(200).send('Hello World');
+    if (req.body === undefined || req.body.name === undefined || req.body.description === undefined || req.body.location === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
+        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
+    }
+    for(let i = 0; i < events.length; i++){
+        if(events[i].id == req.params.eventId){
+            let newEvent = {id: req.query.id, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
+            events[i] = newEvent
+            res.status(201).json(events[i])
+        }
+        res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
+    }
 });
 
 //Delete an event #5
