@@ -75,6 +75,15 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
 app.delete(apiPath + version + '/events', (req, res) => {
     var ret_arr = events.slice();
     events = [];
+    for (let i = 0; i < ret_arr.length; i++) {
+        let eventBookings = ret_arr[i].bookings.slice();
+        ret_arr[i].bookings = [];
+        for (let x = bookings.length - 1; x >= 0; x--) {
+            if (eventBookings.includes(bookings[x].id)) {
+                ret_arr[i].bookings.push(bookings.splice(x, 1));
+            }
+        }
+    }
     res.status(200).json(ret_arr);
 });
 
