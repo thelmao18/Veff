@@ -93,7 +93,7 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
         if (events[i].id == req.params.eventId) {
             for (let x = 0; x < bookings.length; x++) {
                 if (!events[i].bookings.includes(bookings[x].id)) {
-                    var ret_arr = events.splice(i, 1);
+                    let ret_arr = events.splice(i, 1);
                     return res.status(200).json(ret_arr);
                 }
             }
@@ -161,10 +161,20 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
 app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
+            let isBInE = false;
+            for (let x = 0; x < events[i].bookings.length; x++) {
+                if (events[i].bookings[x] == req.params.bookingId) {
+                    isBInE = true;
+                    events[i].bookings.splice(x, 1);
+                }
+            }
+            if (isBInE === false) {
+                return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
+            }
             for (let x = 0; x < bookings.length; x++) {
-                if (bookings[x].id == req.params.bookingId) {
-                    events[i].bookings.push(bookings.splice(x, 1));
-                    return res.status(200).json(bookings[x]);
+                if (isBInE === true) {
+                    let ret_arr = bookings.splice(x, 1);
+                    return res.status(200).json(ret_arr);
                 }
             }
             return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
