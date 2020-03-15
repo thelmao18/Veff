@@ -59,17 +59,33 @@ app.post(apiPath + version + '/events', (req, res) => {
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
             return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
         }
-        if (isNaN(Number(req.body.startDate)) || Number(req.body.startDate))
-        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: req.body.startDate, endDate: req.body.endDate, bookings: []};
+        if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
+            return res.status(400).json({'message': "Invalid date string"})
+        }
+
+        nextEventId = events.length;
+        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
-        nextEventId++;
-        res.status(201).json(newEvent);
+        return res.status(201).json(newEvent);
     }
 });
 
 //Update an event #4
 app.put(apiPath + version + '/events/:eventId', (req, res) => {
-    res.status(200).send('Hello World');
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id == req.params.eventId) {
+            for (let x = 0; x < bookings.length; x++) {
+                if (!events[i].bookings.includes(bookings[x].id)) {
+                    for (let y = 1; y < events.length - 1; y++){
+                        events = events.splice(y, 1, req.body[y])
+                        return res.status(201).status.json(events[i]);
+                    }
+                }
+            }
+            return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be updated."});
+        }
+    }
+    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
 //Delete an event #5
