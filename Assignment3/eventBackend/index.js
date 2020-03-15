@@ -52,7 +52,19 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
 
 //Create a new event #3
 app.post(apiPath + version + '/events', (req, res) => {
-    res.status(201).send('Hello World');
+    if (req.body === undefined || req.body.name === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
+        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
+    }
+    else {
+        if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
+            return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
+        }
+        if (isNaN(Number(req.body.startDate)) || Number(req.body.startDate))
+        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: req.body.startDate, endDate: req.body.endDate, bookings: []};
+        events.push(newEvent);
+        nextEventId++;
+        res.status(201).json(newEvent);
+    }
 });
 
 //Update an event #4
