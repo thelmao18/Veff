@@ -89,8 +89,13 @@ app.put(apiPath + version + '/events/:eventId', (req, res) => {
 app.delete(apiPath + version + '/events/:eventId', (req, res) => {
     for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
-            var ret_arr = events.slice(i, 1);
-            return res.status(200).json(ret_arr);
+            for (let x = 0; x < bookings.length; x++) {
+                if (!events[i].bookings.includes(bookings[x].id)) {
+                    var ret_arr = events.splice(i, 1);
+                    return res.status(200).json(ret_arr);
+                }
+            }
+            return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be deleted."});
         }
     }
     res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
@@ -139,7 +144,7 @@ app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) =
                     return res.status(200).json(bookings[x]);
                 }
             }
-            res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist."});
+            return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
         }
     }
     res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
@@ -152,7 +157,18 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
 
 //Delete a booking #10
 app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
-    res.status(200).send('Hello World');
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].id == req.params.eventId) {
+            for (let x = 0; x < bookings.length; x++) {
+                if (bookings[x].id == req.params.bookingId) {
+                    events[i].bookings.push(bookings.splice(x, 1));
+                    return res.status(200).json(bookings[x]);
+                }
+            }
+            return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
+        }
+    }
+    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
 });
 
 //Delete all bookings for an event #11
