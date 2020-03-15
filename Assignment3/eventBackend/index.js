@@ -51,21 +51,21 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
 });
 
 //Create a new event #3
-app.post(apiPath + version + '/events', (req, res) => {
-    if (req.body === undefined || req.body.name === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
-        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
-    }
-    else {
-        if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
-            return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
-        }
-        if (isNaN(Number(req.body.startDate)) || Number(req.body.startDate))
-        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: req.body.startDate, endDate: req.body.endDate, bookings: []};
-        events.push(newEvent);
-        nextEventId++;
-        res.status(201).json(newEvent);
-    }
-});
+// app.post(apiPath + version + '/events', (req, res) => {
+//     if (req.body === undefined || req.body.name === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
+//         return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
+//     }
+//     else {
+//         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
+//             return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
+//         }
+//         if (isNaN(Number(req.body.startDate)) || Number(req.body.startDate))
+//         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: req.body.startDate, endDate: req.body.endDate, bookings: []};
+//         events.push(newEvent);
+//         nextEventId++;
+//         res.status(201).json(newEvent);
+//     }
+// });
 
 //Update an event #4
 app.put(apiPath + version + '/events/:eventId', (req, res) => {
@@ -78,7 +78,7 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
         if (events[i].id == req.params.eventId) {
             for (let x = 0; x < bookings.length; x++) {
                 if (!events[i].bookings.includes(bookings[x].id)) {
-                    var ret_arr = events.splice(i, 1);
+                    let ret_arr = events.splice(i, 1);
                     return res.status(200).json(ret_arr);
                 }
             }
@@ -146,10 +146,20 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
 app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) => {
     for (let i = 0; i < events.length; i++) {
         if (events[i].id == req.params.eventId) {
+            let isBInE = false;
+            for (let x = 0; x < events[i].bookings.length; x++) {
+                if (events[i].bookings[x] == req.params.bookingId) {
+                    isBInE = true;
+                    events[i].bookings.splice(x, 1);
+                }
+            }
+            if (isBInE === false) {
+                return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
+            }
             for (let x = 0; x < bookings.length; x++) {
-                if (bookings[x].id == req.params.bookingId) {
-                    events[i].bookings.push(bookings.splice(x, 1));
-                    return res.status(200).json(bookings[x]);
+                if (isBInE === true) {
+                    let ret_arr = bookings.splice(x, 1);
+                    return res.status(200).json(ret_arr);
                 }
             }
             return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
