@@ -198,7 +198,7 @@ app.delete(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res
                 return res.status(404).json({'message': "Booking with id " + req.params.bookingId + " does not exist for this event."});
             }
             for (let x = 0; x < bookings.length; x++) {
-                if (isBInE === true) {
+                if (bookings[x].id == req.params.bookingId) {
                     let ret_arr = bookings.splice(x, 1);
                     return res.status(200).json(ret_arr);
                 }
