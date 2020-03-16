@@ -78,7 +78,7 @@ app.put(apiPath + version + '/events/:eventId', (req, res) => {
                 if (!events[i].bookings.includes(bookings[x].id)) {
                     let updatedEvent = {id: events[i].id, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
                     events[i] = updatedEvent
-                    return res.status(201).json(events[i])
+                    return res.status(202).json(events[i])
                 }
             }
             return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be updated."});
@@ -175,6 +175,12 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
         }
         if (numberOfSpotsTaken > eventCapacity){
             return res.status(400).json({'message': 'Number of spots exceeds the event capacity'})
+        }
+        if (req.body.tel === undefined){
+            req.body.tel = ""
+        }
+        if (req.body.email === undefined){
+            req.body.email = ""
         }
         let nextBookingsId = bookings.length;
         let newBooking = {id: nextBookingsId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
