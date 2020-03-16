@@ -56,17 +56,18 @@ app.get(apiPath + version + '/events/:eventId', (req, res) => {
 //Create a new event #3
 app.post(apiPath + version + '/events', (req, res) => {
     if (req.body === undefined || req.body.name === undefined || req.body.capacity === undefined || req.body.startDate === undefined || req.body.endDate === undefined) {
-        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
+        return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"});
     }
     else {
         let nextEventId = eventCounter;
         eventCounter += 1
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
-            return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"})
+            return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"});
         }
-        if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
-            return res.status(400).json({'message': "Invalid date string"})
+        if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate)) || Number(req.body.startDate) == Date.UTC() || Number(req.body.endDate) == Date.UTC() || Number(req.body.startDate) >= Number(req.body.endDate)) {
+            return res.status(400).json({'message': "Invalid date string"});
         }
+<<<<<<< HEAD
         if(req.body.startDate > req.body.endDate){
             return res.status(400).json({'message': "Start date can't be after end date"})
         }
@@ -74,6 +75,9 @@ app.post(apiPath + version + '/events', (req, res) => {
             return res.status(400).json({'message': "Start date can't be set in the past"})
         }
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
+=======
+        let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(Date.UTC(req.body.startDate)), endDate: new Date(Date.UTC(req.body.endDate)), bookings: []};
+>>>>>>> 689b264efba0cf2da65041b2847a99a2063b8c93
         events.push(newEvent);
         return res.status(201).json(newEvent);
     }
@@ -86,8 +90,8 @@ app.put(apiPath + version + '/events/:eventId', (req, res) => {
             for (let x = 0; x < bookings.length; x++) {
                 if (!events[i].bookings.includes(bookings[x].id)) {
                     let updatedEvent = {id: events[i].id, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
-                    events[i] = updatedEvent
-                    return res.status(202).json(events[i])
+                    events[i] = updatedEvent;
+                    return res.status(201).json(events[i]);
                 }
             }
             return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be updated."});
