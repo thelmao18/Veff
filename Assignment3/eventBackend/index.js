@@ -31,6 +31,9 @@ var bookings = [
 
 //The endpoints for events
 
+let bookingCounter = bookings.length
+let eventCounter = events.length
+
 //Read all events #1
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
@@ -56,17 +59,13 @@ app.post(apiPath + version + '/events', (req, res) => {
         return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"})
     }
     else {
-        let nextEventId = events.length;
+        let nextEventId = eventCounter;
+        eventCounter += 1
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
             return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"})
         }
         if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
             return res.status(400).json({'message': "Invalid date string"})
-        }
-        for (i = 0; i < events.length; i++){
-            if (i !== events[i].id){
-                nextEventId = i
-            }
         }
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
@@ -180,7 +179,6 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
                 }
             }
         }
-        let nextBookingsId = 0;
         if (numberOfSpotsTaken > eventCapacity){
             return res.status(400).json({'message': 'Number of spots exceeds the event capacity'});
         }
@@ -190,11 +188,8 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
         if (req.body.email === undefined){
             req.body.email = ""
         }
-        for (f = 0; f < bookings.length; f++){
-            if (f !== bookings[f].id){
-                nextBookingsId = f
-            }
-        }
+        nextBookingsId = bookingCounter
+        bookingCounter += 1
         let newBooking = {id: nextBookingsId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
         events[req.params.eventId].bookings.push(nextBookingsId);
         bookings.push(newBooking);
