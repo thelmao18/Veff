@@ -31,6 +31,9 @@ var bookings = [
 
 //The endpoints for events
 
+let bookingCounter = bookings.length
+let eventCounter = events.length
+
 //Read all events #1
 app.get(apiPath + version + '/events', (req, res) => {
     let ret_arr = [];
@@ -56,13 +59,14 @@ app.post(apiPath + version + '/events', (req, res) => {
         return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"});
     }
     else {
+        let nextEventId = eventCounter;
+        eventCounter += 1
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
             return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"});
         }
         if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate)) || Number(req.body.startDate) == Date.UTC() || Number(req.body.endDate) == Date.UTC() || Number(req.body.startDate) >= Number(req.body.endDate)) {
             return res.status(400).json({'message': "Invalid date string"});
         }
-        let nextEventId = events.length;
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(Date.UTC(req.body.startDate)), endDate: new Date(Date.UTC(req.body.endDate)), bookings: []};
         events.push(newEvent);
         return res.status(201).json(newEvent);
@@ -133,7 +137,7 @@ app.get(apiPath + version + '/events/:eventId/bookings', (req, res) => {
             return res.status(200).json(ret_arr);
         }
     }
-    res.status(404).json({'message': "Event with id " + req.params.eventId + " does not exist."});
+    res.status(404).json({'message': "Event w   ith id " + req.params.eventId + " does not exist."});
 });
 
 //Read an individual booking #8
@@ -178,7 +182,14 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
         if (numberOfSpotsTaken > eventCapacity){
             return res.status(400).json({'message': 'Number of spots exceeds the event capacity'});
         }
-        let nextBookingsId = bookings.length;
+        if (req.body.tel === undefined){
+            req.body.tel = ""
+        }
+        if (req.body.email === undefined){
+            req.body.email = ""
+        }
+        nextBookingsId = bookingCounter
+        bookingCounter += 1
         let newBooking = {id: nextBookingsId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
         events[req.params.eventId].bookings.push(nextBookingsId);
         bookings.push(newBooking);
