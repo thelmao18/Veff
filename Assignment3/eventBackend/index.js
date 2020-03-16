@@ -7,7 +7,7 @@ const app = express();
 //URL
 const apiPath = '/api/';
 const version = 'v1';
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //Import a body parser to access the requests as json
 const bodyParser = require('body-parser');
@@ -57,7 +57,7 @@ app.post(apiPath + version + '/events', (req, res) => {
     }
     else {
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
-            return res.status(400).json({'message': "Capacity has to be larger or equal to 0!"})
+            return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"})
         }
         if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
             return res.status(400).json({'message': "Invalid date string"})
@@ -154,19 +154,22 @@ app.get(apiPath + version + '/events/:eventId/bookings/:bookingId', (req, res) =
 
 //Create a new booking #9
 app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
-    let numberOfSpotsTaken = req.body.spots
-    let eventCapacity = 0
+    let numberOfSpotsTaken = req.body.spots;
+    let eventCapacity = 0;
     if (req.body === undefined || req.body.firstName === undefined || req.body.lastName === undefined || (req.body.tel === undefined && req.body.email === undefined) || req.body.spots === undefined) {
-        return res.status(400).json({'message': "First name, last name, telaphone or email and spots are required in the request body!"})
+        return res.status(400).json({'message': "First name, last name, telaphone or email and spots are required in the request body!"});
+    }
+    if (isNaN(Number(req.body.spots)) || Number(req.body.spots) <= 0) {
+        return res.status(400).json({'message': "The number of spots cannot be NaN nor can they be a number equal to 0 or less."});
     }
     else {
         for (i = 0; i < events.length; i++){
             if (events[i].id == req.params.eventId){
-                eventCapacity = events[i].capacity
+                eventCapacity = events[i].capacity;
                 for (let x = 0; x < events[i].bookings.length; x++){
                     for (let y = 0; y < bookings.length; y++){
                         if (bookings[y].id == events[i].bookings[x]){
-                            numberOfSpotsTaken += bookings[y].spots
+                            numberOfSpotsTaken += bookings[y].spots;
                         }
                     }
                 }
@@ -174,11 +177,11 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
             }
         }
         if (numberOfSpotsTaken > eventCapacity){
-            return res.status(400).json({'message': 'Number of spots exceeds the event capacity'})
+            return res.status(400).json({'message': 'Number of spots exceeds the event capacity'});
         }
         let nextBookingsId = bookings.length;
         let newBooking = {id: nextBookingsId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
-        events[req.params.eventId].bookings.push(nextBookingsId)
+        events[req.params.eventId].bookings.push(nextBookingsId);
         bookings.push(newBooking);
         return res.status(201).json(newBooking);
 });
