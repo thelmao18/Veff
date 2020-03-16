@@ -107,8 +107,7 @@ app.delete(apiPath + version + '/events/:eventId', (req, res) => {
         if (events[i].id == req.params.eventId) {
             for (let x = 0; x < bookings.length; x++) {
                 if (!events[i].bookings.includes(bookings[x].id)) {
-                    let ret_arr = events.splice(i, 1);
-                    return res.status(200).json(ret_arr);
+                    return res.status(200).json(events.splice(i, 1));
                 }
             }
             return res.status(400).json({'message': "Event with id " + req.params.eventId + " has bookings and therefor cannot be deleted."});
