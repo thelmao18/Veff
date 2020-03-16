@@ -31,8 +31,8 @@ var bookings = [
 
 //The endpoints for events
 
-let bookingCounter = bookings.length
-let eventCounter = events.length
+var nextEventId = 2;
+var nextBookingId = 3;
 
 //Read all events #1
 app.get(apiPath + version + '/events', (req, res) => {
@@ -59,8 +59,6 @@ app.post(apiPath + version + '/events', (req, res) => {
         return res.status(400).json({'message': "Name, capacity, startDate and endDate are required in the request body!"});
     }
     else {
-        let nextEventId = eventCounter;
-        eventCounter += 1
         if (isNaN(Number(req.body.capacity)) || Number(req.body.capacity) <= 0) {
             return res.status(400).json({'message': "Capacity has to be a number that is larger or equal to 0!"});
         }
@@ -81,6 +79,7 @@ app.post(apiPath + version + '/events', (req, res) => {
         }
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
+        nextEventId++;
         return res.status(201).json(newEvent);
     }
 });
@@ -200,11 +199,10 @@ app.post(apiPath + version + '/events/:eventId/bookings', (req, res) => {
         if (req.body.email === undefined){
             req.body.email = ""
         }
-        nextBookingsId = bookingCounter
-        bookingCounter += 1
-        let newBooking = {id: nextBookingsId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
-        events[req.params.eventId].bookings.push(nextBookingsId);
+        let newBooking = {id: nextBookingId, firstName: req.body.firstName, lastName: req.body.lastName, tel: req.body.tel, email: req.body.email, spots: req.body.spots};
+        events[req.params.eventId].bookings.push(nextBookingId);
         bookings.push(newBooking);
+        nextBookingId++;
         return res.status(201).json(newBooking);
 });
 
