@@ -67,6 +67,12 @@ app.post(apiPath + version + '/events', (req, res) => {
         if (isNaN(Number(req.body.startDate)) || isNaN(Number(req.body.endDate))){
             return res.status(400).json({'message': "Invalid date string"})
         }
+        if(req.body.startDate > req.body.endDate){
+            return res.status(400).json({'message': "Start date can't be after end date"})
+        }
+        if(Date.now() > new Date(req.body.startDate * 1000)){
+            return res.status(400).json({'message': "Start date can't be set in the past"})
+        }
         let newEvent = {id: nextEventId, name: req.body.name, description: req.body.description, location: req.body.location, capacity: req.body.capacity, startDate: new Date(req.body.startDate * 1000), endDate: new Date(req.body.endDate * 1000), bookings: []};
         events.push(newEvent);
         return res.status(201).json(newEvent);
