@@ -60,60 +60,81 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');
-                res.body.length.should.be.eql(1);
-                res.body[0].should.have.property('_id');
-                res.body[0].should.have.property('description').eql("Reykjavik");
-                Object.keys(res.body[0]).length.should.be.eql(2);
                 done();
         });
     });
 
-    it("", function(done) {
+    it("GET /api/v1/events/:eventId", function(done) {
         chai.request(apiUrl)
+            .get('/api/v1/events/' + eventId)
             .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('object');
                 done();
             });
     });
 
-    it("", function(done) {
+    it("POST /api/v1/events", function(done) {
         chai.request(apiUrl)
+            .post('/api/v1/events')
+            .set('content-type', 'application/json')
+            .send()
             .end((err, res) => {
+                res.should.have.status(201);
+                res.should.be.json;
                 done();
             });
     });
 
-    it("", function(done) {
+    it("GET /api/v1/events/:eventId/bookings", function(done) {
         chai.request(apiUrl)
+            .get('/api/v1/events/' + eventId + '/bookings')
             .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
                 done();
             });
     });
 
-    it("", function(done) {
+    it("GET /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
+            .get('/api/v1/events/' + eventId + '/bookings/' + bookingId)
             .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
                 done();
             });
     });
 
-    it("", function(done) {
+    it("POST /api/v1/events/:eventId/bookings", function(done) {
         chai.request(apiUrl)
+            .post('/api/v1/events/' + eventId + '/bookings')
+            .set('content-type', 'application/json')
+            .send()
             .end((err, res) => {
+                res.should.have.status(201);
+                res.should.be.json;
                 done();
             });
     });
 
     //Endpoint tests to DELETE individual booking, success and failure.
-    it("", function(done) {
+    it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
+            .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
             .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
                 done();
             });
     });
 
-    it("", function(done) {
+    it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
+            .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
             .end((err, res) => {
+                res.should.have.status(404);
                 done();
             });
     });
