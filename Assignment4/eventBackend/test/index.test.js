@@ -53,6 +53,7 @@ describe('Endpoint tests', () => {
     });
 
     //Regular endpoint tests, all success cases.
+
     it("GET /api/v1/events", function(done) {
         chai.request(apiUrl)
             .get('/api/v1/events')
@@ -120,6 +121,8 @@ describe('Endpoint tests', () => {
     });
 
     //Endpoint tests to DELETE individual booking, success and failure.
+    
+    //Success case!
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
@@ -130,6 +133,7 @@ describe('Endpoint tests', () => {
             });
     });
 
+    //Failure case!
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
