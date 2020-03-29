@@ -10,6 +10,8 @@ let should = chai.should();
 let chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
+let apiUrl = "http://localhost:3000";
+
 describe('Endpoint tests', () => {
     //###########################
     //These variables contain the ids of the existing event/booking
@@ -48,5 +50,71 @@ describe('Endpoint tests', () => {
         console.log("Our event has id " + eventId);
         console.log("Our booking has id " + bookingId);
         chai.expect(1).to.equal(1);
+    });
+
+    //Regular endpoint tests, all success cases.
+    it("GET /api/v1/events", function(done) {
+        chai.request(apiUrl)
+            .get('/api/v1/events')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.should.be.json;
+                res.body.should.be.a('array');
+                res.body.length.should.be.eql(1);
+                res.body[0].should.have.property('_id');
+                res.body[0].should.have.property('description').eql("Reykjavik");
+                Object.keys(res.body[0]).length.should.be.eql(2);
+                done();
+        });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    //Endpoint tests to DELETE individual booking, success and failure.
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
+    });
+
+    it("", function(done) {
+        chai.request(apiUrl)
+            .end((err, res) => {
+                done();
+            });
     });
 });
