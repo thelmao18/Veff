@@ -56,7 +56,7 @@ describe('Endpoint tests', () => {
 
     it("GET /api/v1/events", function(done) {
         chai.request(apiUrl)
-            .get('/api/v1/events')
+            .get('/api/v1/events/')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
@@ -77,8 +77,9 @@ describe('Endpoint tests', () => {
     });
 
     it("POST /api/v1/events", function(done) {
+        let newTestEvent = {}
         chai.request(apiUrl)
-            .post('/api/v1/events')
+            .post('/api/v1/events/')
             .set('content-type', 'application/json')
             .send()
             .end((err, res) => {
@@ -94,6 +95,7 @@ describe('Endpoint tests', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
+                res.body.should.be.a('array');
                 done();
             });
     });
