@@ -141,7 +141,7 @@ describe('Endpoint tests', () => {
         chai.request(apiUrl)
             .post('/api/v1/events/' + eventId + '/bookings')
             .set('content-type', 'application/json')
-            .send(newTestBooking)
+            .send(ntb)
             .end((err, res) => {
                 res.should.have.status(201);
                 res.should.be.json;
