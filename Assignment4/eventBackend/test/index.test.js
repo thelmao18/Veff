@@ -76,8 +76,6 @@ describe('Endpoint tests', () => {
                 res.body.should.have.all.keys('description', 'location', '_id', 'name', 'capacity', 'startDate', 'endDate', 'bookings');
                 res.body.should.have.property('description').equal('');
                 res.body.should.have.property('location').equal('');
-                // console.log(eventId);
-                // console.log(res.body._id)
                 res.body.should.have.property('_id').equal(res.body._id, eventId);
                 res.body.should.have.property('name').equal('Test Event');
                 res.body.should.have.property('capacity').equal(10);
@@ -147,6 +145,7 @@ describe('Endpoint tests', () => {
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
+            .auth('admin', 'secret')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
@@ -158,8 +157,9 @@ describe('Endpoint tests', () => {
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
+            .auth('wrong', 'wrong2')
             .end((err, res) => {
-                res.should.have.status(404);
+                res.should.not.have.status(200);
                 done();
             });
     });
