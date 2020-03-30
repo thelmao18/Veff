@@ -103,6 +103,8 @@ describe('Endpoint tests', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
+                res.body.should.be.a('array');
+                res.body.should.have.length(1);
                 done();
             });
     });
@@ -113,6 +115,14 @@ describe('Endpoint tests', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('tel', 'email', '_id', 'firstName', 'lastName', 'spots');
+                res.body.should.have.property('tel').equal('');
+                res.body.should.have.property('email').equal('jane@doe.com');
+                res.body.should.have.property('_id').to.be.a('string');
+                res.body.should.have.property('firstName').equal('Jane');
+                res.body.should.have.property('lastName').equal('Doe');
+                res.body.should.have.property('spots').equal(2);
                 done();
             });
     });
