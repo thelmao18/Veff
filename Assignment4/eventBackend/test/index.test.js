@@ -86,7 +86,7 @@ describe('Endpoint tests', () => {
     });
 
     it("POST /api/v1/events", function(done) {
-        let newTestEvent = {name: "Bday", description: "A Bday partayyy", location: "Reykjavik", capacity: 4, startDate: Date, endDate: Date, bookings: []};
+        let newTestEvent = {name: "Bday", description: "A Bday partayyy", location: "Reykjavik", capacity: 4, startDate: '', endDate: '', bookings: []};
         chai.request(apiUrl)
             .post('/api/v1/events/')
             .set('content-type', 'application/json')
@@ -100,6 +100,8 @@ describe('Endpoint tests', () => {
                 res.body.should.have.property('description').eql(newTestEvent.description);
                 res.body.should.have.property('location').eql(newTestEvent.location);
                 res.body.should.have.property('capacity').eql(newTestEvent.capacity);
+                res.body.should.have.property('startDate').eql(newTestEvent.startDate);
+                res.body.should.have.property('endDate').eql(newTestEvent.endDate);
                 res.body.should.have.property('bookings').eql(newTestEvent.bookings);
                 Object.keys(res.body).length.should.be.eql(8);
                 done();
