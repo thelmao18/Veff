@@ -61,6 +61,7 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');
+                res.body.should.have.length(1);
                 done();
         });
     });
@@ -72,6 +73,14 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('object');
+                res.body.should.have.all.keys('description', 'location', '_id', 'name', 'capacity', 'startDate', 'endDate', 'bookings');
+                res.body.should.have.property('description').equal('');
+                res.body.should.have.property('location').equal('');
+                res.body.should.have.property('_id').to.be.a('string');
+                res.body.should.have.property('name').equal('Test Event');
+                res.body.should.have.property('capacity').equal(10);
+                res.body.should.have.property('bookings');
+                res.body.bookings[0].should.be.a('string');
                 done();
             });
     });
