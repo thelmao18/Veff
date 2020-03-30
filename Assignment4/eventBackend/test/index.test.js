@@ -76,7 +76,9 @@ describe('Endpoint tests', () => {
                 res.body.should.have.all.keys('description', 'location', '_id', 'name', 'capacity', 'startDate', 'endDate', 'bookings');
                 res.body.should.have.property('description').equal('');
                 res.body.should.have.property('location').equal('');
-                res.body.should.have.property('_id').to.be.a('string');
+                // console.log(eventId);
+                // console.log(res.body._id)
+                res.body.should.have.property('_id').equal(res.body._id, eventId);
                 res.body.should.have.property('name').equal('Test Event');
                 res.body.should.have.property('capacity').equal(10);
                 res.body.should.have.property('bookings');
@@ -119,7 +121,7 @@ describe('Endpoint tests', () => {
                 res.body.should.have.all.keys('tel', 'email', '_id', 'firstName', 'lastName', 'spots');
                 res.body.should.have.property('tel').equal('');
                 res.body.should.have.property('email').equal('jane@doe.com');
-                res.body.should.have.property('_id').to.be.a('string');
+                res.body.should.have.property('_id').equal(res.body._id, bookingId);
                 res.body.should.have.property('firstName').equal('Jane');
                 res.body.should.have.property('lastName').equal('Doe');
                 res.body.should.have.property('spots').equal(2);
