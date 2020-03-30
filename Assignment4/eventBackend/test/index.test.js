@@ -61,6 +61,7 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');
+                res.body.should.have.length(1);
                 done();
         });
     });
@@ -72,19 +73,37 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('object');
+                res.body.should.have.all.keys('description', 'location', '_id', 'name', 'capacity', 'startDate', 'endDate', 'bookings');
+                res.body.should.have.property('description').eql('');
+                res.body.should.have.property('location').eql('');
+                res.body.should.have.property('_id').eql(res.body._id, eventId);
+                res.body.should.have.property('name').eql('Test Event');
+                res.body.should.have.property('capacity').eql(10);
+                res.body.should.have.property('bookings');
+                res.body.bookings[0].should.be.a('string');
                 done();
             });
     });
 
     it("POST /api/v1/events", function(done) {
-        let newTestEvent = {}
+        let newTestEvent = {name: "Bday", description: "A Bday partayyy", location: "Reykjavik", capacity: 4, startDate: new Date(Date.UTC(2020, 02, 03, 22, 0)), endDate: new Date(Date.UTC(2020, 02, 03, 23, 45)), bookings: []};
         chai.request(apiUrl)
             .post('/api/v1/events/')
             .set('content-type', 'application/json')
-            .send()
+            .send(newTestEvent)
             .end((err, res) => {
                 res.should.have.status(201);
                 res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.property('_id');
+                res.body.should.have.property('name').eql('Bday');
+                res.body.should.have.property('description').eql('A Bday partayyy');
+                res.body.should.have.property('location').eql('Reykjavik');
+                res.body.should.have.property('capacity').eql(4);
+                res.body.should.have.property('startDate').eql(new Date(Date.UTC(2020, 02, 03, 22, 0)));
+                res.body.should.have.property('endDate').eql(new Date(Date.UTC(2020, 02, 03, 23, 45)));
+                res.body.should.have.property('bookings').eql([]);
+                Object.keys(res.body).length.should.be.eql(8);
                 done();
             });
     });
@@ -96,6 +115,7 @@ describe('Endpoint tests', () => {
                 res.should.have.status(200);
                 res.should.be.json;
                 res.body.should.be.a('array');
+                res.body.should.have.length(1);
                 done();
             });
     });
@@ -106,18 +126,35 @@ describe('Endpoint tests', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('tel', 'email', '_id', 'firstName', 'lastName', 'spots');
+                res.body.should.have.property('tel').eql('');
+                res.body.should.have.property('email').eql('jane@doe.com');
+                res.body.should.have.property('_id').eql(res.body._id, bookingId);
+                res.body.should.have.property('firstName').eql('Jane');
+                res.body.should.have.property('lastName').eql('Doe');
+                res.body.should.have.property('spots').eql(2);
                 done();
             });
     });
 
     it("POST /api/v1/events/:eventId/bookings", function(done) {
+        let ntb = {firstName: "Thelma", lastName: "Ólafsdóttir", tel: "8945784", email: "thelma@doe.com", spots: 4};
         chai.request(apiUrl)
             .post('/api/v1/events/' + eventId + '/bookings')
             .set('content-type', 'application/json')
-            .send()
+            .send(newTestBooking)
             .end((err, res) => {
                 res.should.have.status(201);
                 res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.property('_id');
+                res.body.should.have.property('firstName').eql(ntb.firstName);
+                res.body.should.have.property('lastName').eql(ntb.lastName);
+                res.body.should.have.property('tel').eql(ntb.tel);
+                res.body.should.have.property('email').eql(ntb.email);
+                res.body.should.have.property('spots').eql(ntb.spots);
+                Object.keys(res.body).length.should.be.eql(6);
                 done();
             });
     });
@@ -128,9 +165,17 @@ describe('Endpoint tests', () => {
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
+            .auth('admin', 'secret')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.should.be.json;
+                res.body.should.be.a('object');
+                res.body.should.have.property('tel').eql('');
+                res.body.should.have.property('email').eql('jane@doe.com');
+                res.body.should.have.property('_id').eql(res.body._id, bookingId);
+                res.body.should.have.property('firstName').eql('Jane');
+                res.body.should.have.property('lastName').eql('Doe');
+                res.body.should.have.property('spots').eql(2);
                 done();
             });
     });
@@ -139,8 +184,9 @@ describe('Endpoint tests', () => {
     it("DELETE /api/v1/events/:eventId/bookings/:bookingId", function(done) {
         chai.request(apiUrl)
             .delete('/api/v1/events/' + eventId + '/bookings/' + bookingId)
+            .auth('wrong', 'wrong2')
             .end((err, res) => {
-                res.should.have.status(404);
+                res.should.not.have.status(200);
                 done();
             });
     });
